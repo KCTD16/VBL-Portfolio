@@ -16,25 +16,31 @@ BIO = {
     }
 }
 
+# The Gallery Source (Home & Archive)
 PROJECTS = [
+    # The 5 Videos you requested
+    {"id": "vbl-main", "title": "VBL Showreel", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262526/vblvid.mp4", "is_video": True, "tags": ["Motion"]},
+    {"id": "city-p", "title": "City Project", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262766/city-project.mp4", "is_video": True, "tags": ["Urban"]},
+    {"id": "w20", "title": "Work 20", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262748/work-20.mp4", "is_video": True, "tags": ["Motion"]},
+    {"id": "w21", "title": "Work 21", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262736/work-21.mp4", "is_video": True, "tags": ["Motion"]},
+    {"id": "w22", "title": "Work 22", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262737/work-22.mp4", "is_video": True, "tags": ["Motion"]},
+    
+    # Original Featured
     {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.mp4", "is_video": True, "tags": ["Cinema"]},
     {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/noir-project.mp4", "is_video": True, "tags": ["Editorial"]},
-    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
-    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/city-project.mp4", "is_video": True, "tags": ["Urban"]},
+    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
     {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.jpg", "is_video": False, "tags": ["Editorial"]},
     {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.jpg", "is_video": False, "tags": ["Brand"]}
 ]
 
-# Adding exactly 19 archive pieces to avoid broken links
+# Smart Loader for the remaining 19 photos
 for i in range(1, 20):
-    # This checks for the common formats. If you renamed them all to .webp, it finds them.
-    # If one is a .png, it finds that too.
     PROJECTS.append({
-        "id": f"w{i}",
+        "id": f"bulk-{i}",
         "title": f"Project {i}",
-        "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}",
+        "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}.jpg",
         "is_video": False,
-        "tags": ["Archive"]
+        "tags": ["Photography"]
     })
 
 SKILLS = [{"name": "Cinema", "level": 98}]

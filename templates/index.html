@@ -42,13 +42,14 @@
         <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
+        <div class="absolute inset-0 bg-black/20 z-1"></div>
         <h1 class="relative z-10 text-7xl md:text-9xl font-editorial italic tracking-tighter text-white">{{ bio.name }}</h1>
     </section>
 
     <!-- Archive -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
-            <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-6">
+            <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
                 <h2 class="text-3xl font-editorial italic">The Archive</h2>
                 <p class="text-[10px] uppercase tracking-widest opacity-40">Selected Projects</p>
             </div>
@@ -78,7 +79,7 @@
         </div>
     </section>
 
-    <!-- FOOTER REDESIGN -->
+    <!-- FOOTER: NEW CLEAN DESIGN -->
     <footer class="py-40 text-center border-t border-[var(--border-color)]">
         <div class="flex flex-col items-center gap-6">
             <p class="text-[10px] uppercase tracking-[0.5em] opacity-40 mb-2">Get in Touch</p>
@@ -104,8 +105,7 @@
             cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`;
         });
         function openLightbox(isVid, src) {
-            const lb = document.getElementById('lightbox');
-            lb.style.display = 'flex';
+            const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
             document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
@@ -114,13 +114,9 @@
             card.onmouseenter = () => { if(vid) vid.play(); isHovering = true; };
             card.onmouseleave = () => { if(vid) vid.pause(); isHovering = false; };
         });
-        document.querySelectorAll('a, button').forEach(el => {
-            el.onmouseenter = () => isHovering = true;
-            el.onmouseleave = () => isHovering = false;
-        });
+        document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
         function toggleTheme() {
-            const h = document.documentElement;
-            const i = document.getElementById('theme-icon');
+            const h = document.documentElement; const i = document.getElementById('theme-icon');
             if (h.getAttribute('data-theme') === 'option1') { h.setAttribute('data-theme', ''); i.className = 'fas fa-moon'; }
             else { h.setAttribute('data-theme', 'option1'); i.className = 'fas fa-sun'; }
         }
