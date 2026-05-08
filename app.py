@@ -9,10 +9,7 @@ app = Flask(__name__)
 def inject_methods():
     def get_url(filename):
         if not filename: return ""
-        # If it's a Cloudinary link, use it directly
-        if filename.startswith('http'):
-            return filename
-        # Fallback for any local files still in static
+        if filename.startswith('http'): return filename
         return url_for('static', filename=filename)
     return dict(get_url=get_url)
 
