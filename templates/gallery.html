@@ -9,17 +9,19 @@
     <style>
         :root { --bg-color: #0a0a0c; --text-color: #ffffff; }
         [data-theme='orange'] { --bg-color: #FA7301; --text-color: #000000; }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: all 0.6s ease; overflow-x: hidden; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.6s ease; overflow-x: hidden; }
         .font-editorial { font-family: 'Playfair Display', serif; }
         @media (pointer: fine) { body, a, button, .project-card { cursor: none !important; } }
-        #custom-cursor { position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; z-index: 9999; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-        #lightbox.hidden { display: none; }
-        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
+        #custom-cursor {
+            position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; z-index: 9999; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            will-change: transform; transition: opacity 0.3s ease; opacity: 0;
+        }
+        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body>
     <div id="custom-cursor"></div>
-    <div id="lightbox" class="hidden" onclick="closeLightbox()"><div id="lightbox-content"></div></div>
+    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
     
     <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference text-white">
         <a href="/" class="font-editorial italic text-2xl">VBL</a>
@@ -44,21 +46,25 @@
         </div>
     </main>
 
-    <!-- ORANGE TOGGLE -->
-    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100]"><i class="fas fa-palette"></i></button>
+    <footer class="py-40 text-center border-t border-white/10">
+        <div class="flex flex-col items-center gap-6">
+            <span class="text-2xl md:text-4xl font-editorial italic tracking-tight">{{ bio.contact.email }}</span>
+            <a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold hover:opacity-50 transition">
+                Instagram: visualsbylaurine
+            </a>
+        </div>
+    </footer>
 
+    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100]"><i class="fas fa-palette"></i></button>
     <script>
         const cursor = document.getElementById('custom-cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.opacity = '1';
-            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-        });
+        document.addEventListener('mousemove', (e) => { cursor.style.opacity = '1'; cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; });
         function openLightbox(isVid, src) {
-            document.getElementById('lightbox').classList.remove('hidden');
-            const content = document.getElementById('lightbox-content');
-            content.innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
+            const lb = document.getElementById('lightbox');
+            lb.style.display = 'flex';
+            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain shadow-2xl">`;
         }
-        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
         function toggleOrange() { document.documentElement.getAttribute('data-theme') === 'orange' ? document.documentElement.setAttribute('data-theme', '') : document.documentElement.setAttribute('data-theme', 'orange'); }
         document.querySelectorAll('video').forEach(vid => {
             const card = vid.closest('.project-card');
