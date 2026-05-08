@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="option1">
 <head>
     <meta charset="UTF-8">
     <title>Full Works | VBL</title>
@@ -12,32 +12,23 @@
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.6s ease; overflow-x: hidden; }
         .font-editorial { font-family: 'Playfair Display', serif; }
         @media (pointer: fine) { body, a, button, .project-card { cursor: none !important; } }
-        #custom-cursor {
-            position: fixed; top: 0; left: 0; width: 35px; height: 35px; background-color: white;
-            pointer-events: none; z-index: 9999999; mix-blend-mode: difference;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            will-change: transform; transition: opacity 0.3s ease; opacity: 0;
-        }
-        #lightbox.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        #lightbox { transition: all 0.4s ease; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
+        #custom-cursor { position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; z-index: 9999; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        #lightbox.hidden { display: none; }
+        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
     <div id="custom-cursor"></div>
-    <div id="lightbox" class="hidden">
-        <button onclick="closeLightbox()" class="absolute top-10 right-10 text-white z-[1001]"><i class="fas fa-times text-2xl"></i></button>
-        <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
-    </div>
-    <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference text-white">
-        <a href="/" class="font-editorial italic text-2xl tracking-tighter">VBL</a>
-        <div class="flex gap-8 text-[10px] uppercase tracking-[0.4em] font-bold"><a href="/" class="opacity-50 hover:opacity-100 transition">Home</a><span class="border-b border-white">Full Works</span></div>
+    <div id="lightbox" class="hidden" onclick="closeLightbox()"><div id="lightbox-content"></div></div>
+    <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference">
+        <a href="/" class="font-editorial italic text-2xl">VBL</a>
+        <div class="flex gap-8 text-[10px] uppercase tracking-[0.4em] font-bold"><a href="/" class="opacity-50 hover:opacity-100">Home</a><span>Full Works</span></div>
     </nav>
     <header class="px-8 md:px-12 py-20 border-b border-white/10"><h1 class="text-7xl md:text-9xl font-editorial italic tracking-tighter">Full Works.</h1></header>
     <main class="px-4 md:px-8 py-12 pb-20">
         <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
             {% for project in projects %}
-            <div class="project-card relative group break-inside-avoid cursor-pointer overflow-hidden bg-black/20" 
-                 onclick="openLightbox('{{ project.is_video }}', '{% if project.is_video %}{{ project.video }}{% else %}{{ project.image }}{% endif %}')">
+            <div class="project-card relative group break-inside-avoid cursor-pointer overflow-hidden bg-black/20" onclick="openLightbox('{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                 {% if project.is_video %}<video loop muted playsinline class="w-full"><source src="{{ project.video }}" type="video/mp4"></video>
                 {% else %}<img src="{{ project.image }}" class="w-full group-hover:scale-105 transition-all duration-700">{% endif %}
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6"><p class="text-[10px] uppercase tracking-widest font-bold text-white">{{ project.title }}</p></div>
@@ -47,18 +38,13 @@
     <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100]"><i class="fas fa-palette"></i></button>
     <script>
         const cursor = document.getElementById('custom-cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.opacity = '1';
-            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-        });
-        function openLightbox(isVideo, source) {
-            const lb = document.getElementById('lightbox');
-            const content = document.getElementById('lightbox-content');
-            lb.classList.remove('hidden');
-            content.innerHTML = isVideo === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh]"><source src="${source}" type="video/mp4"></video>` : `<img src="${source}" class="max-w-full max-h-[85vh] object-contain">`;
+        document.addEventListener('mousemove', (e) => { cursor.style.opacity = '1'; cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; });
+        function openLightbox(isVid, src) {
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain shadow-2xl">`;
         }
         function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
-        function toggleOrange() { const html = document.documentElement; html.getAttribute('data-theme') === 'orange' ? html.setAttribute('data-theme', '') : html.setAttribute('data-theme', 'orange'); }
+        function toggleOrange() { document.documentElement.getAttribute('data-theme') === 'orange' ? document.documentElement.setAttribute('data-theme', '') : document.documentElement.setAttribute('data-theme', 'orange'); }
         document.querySelectorAll('video').forEach(vid => {
             const card = vid.closest('.project-card');
             card.onmouseenter = () => vid.play();
