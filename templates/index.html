@@ -43,15 +43,15 @@
         </div>
     </nav>
 
+    <!-- The Lightbox container -->
     <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
 
     <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center bg-black">
-        <!-- Hero video MUST stay muted as per browser rules -->
         <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
-        <h1 class="relative z-10 text-7xl md:text-9xl font-editorial italic tracking-tighter text-white">{{ bio.name }}</h1>
+        <h1 class="relative z-10 text-7xl md:text-[11rem] font-editorial italic tracking-tighter text-white">{{ bio.name }}</h1>
     </section>
 
     <!-- Banner -->
@@ -70,10 +70,9 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" onclick="openLightbox('{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                <div class="reveal group cursor-pointer project-card" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
-                            <!-- No Autoplay here -->
                             <video loop muted playsinline class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
                             <div class="absolute top-4 right-4 text-white/50 group-hover:text-white transition"><i class="fas fa-play text-[8px]"></i></div>
                         {% else %}
@@ -106,36 +105,50 @@
     </button>
 
     <script>
-        // --- 1. Audio Logic (The Fix) ---
         let audioEnabled = false;
-        
-        // This unlocks audio capability without playing any videos
-        document.addEventListener('click', () => { 
-            audioEnabled = true; 
-            console.log("Audio Unlocked");
-        }, { once: true });
+        // This click purely unlocks the audio capability, NO video play triggered here.
+        document.addEventListener('click', () => { audioEnabled = true; }, { once: true });
 
+        // Hover Play/Pause
         document.querySelectorAll('.project-card').forEach(card => {
             const vid = card.querySelector('video.project-vid');
             if (vid) {
                 card.onmouseenter = () => {
-                    if (audioEnabled) vid.muted = false; // Only unmute if user has clicked once
+                    if (audioEnabled) vid.muted = false;
                     vid.play().catch(e => {});
                     isHovering = true;
                 };
                 card.onmouseleave = () => {
                     vid.pause();
-                    vid.muted = true; // Always mute when leaving
+                    vid.muted = true;
                     isHovering = false;
                 };
             }
         });
 
-        // Preloader & Scroll Reveal
+        // The Fix: Click handler that pauses the background video
+        function handleProjectClick(element, isVid, src) {
+            // Stop the small video in the background grid
+            const bgVid = element.querySelector('video');
+            if(bgVid) bgVid.pause();
+            
+            // Open the Lightbox
+            openLightbox(isVid, src);
+        }
+
+        function openLightbox(isVid, src) {
+            const lb = document.getElementById('lightbox'); 
+            lb.style.display = 'flex';
+            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? 
+                `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : 
+                `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
+        }
+
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-content').innerHTML = ''; }
+        
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
         const obs = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-        
         const cursor = document.getElementById('custom-cursor');
         let isHovering = false;
         document.addEventListener('mousemove', (e) => {
@@ -144,12 +157,6 @@
                 cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`;
             });
         });
-
-        function openLightbox(isVid, src) {
-            const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
-            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
-        }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
         document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
         function toggleTheme() {
             const h = document.documentElement; const i = document.getElementById('theme-icon');
