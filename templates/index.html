@@ -13,12 +13,17 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
+        
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: 35px; height: 35px; background-color: white;
-            pointer-events: none; z-index: 9999999; mix-blend-mode: difference; opacity: 0;
+            pointer-events: none; z-index: 9999999; mix-blend-mode: difference;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            will-change: transform; transition: opacity 0.3s ease;
+            will-change: transform; transition: opacity 0.3s ease; opacity: 0;
         }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
         .font-editorial { font-family: 'Playfair Display', serif; }
         #lightbox.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         #lightbox { transition: all 0.4s ease; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
@@ -29,6 +34,7 @@
 </head>
 <body id="home">
     <div id="custom-cursor"></div>
+
     <nav class="fixed top-0 w-full z-[100] px-6 py-8 md:px-12 flex justify-between items-center mix-blend-difference text-white">
         <div class="font-editorial italic text-2xl tracking-tighter">VBL</div>
         <div class="flex gap-8 md:gap-12 text-[10px] uppercase tracking-[0.4em] font-bold">
@@ -37,12 +43,15 @@
             <a href="#content">Content</a>
         </div>
     </nav>
+
     <div id="lightbox" class="hidden">
         <button onclick="closeLightbox()" class="absolute top-10 right-10 text-white z-[1001] hover:scale-125 transition"><i class="fas fa-times text-2xl"></i></button>
         <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
     </div>
+
+    <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
-        <video id="hero-video" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60">
+        <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60">
             <source src="{{ url_for('static', filename=bio.hero_video) }}" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-black/20 z-1 pointer-events-none"></div>
@@ -51,24 +60,25 @@
             <p class="text-[10px] tracking-[0.7em] uppercase text-zinc-300 mt-10 font-bold">{{ bio.role }}</p>
         </div>
     </section>
-    <!-- Gallery: Compact 3x3 -->
-    <section id="gallery" class="py-32 px-12 bg-[var(--bg-secondary)]">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10 px-2">
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
+        <div class="max-w-6xl mx-auto">
+            <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10 px-2">
                 <h2 class="text-3xl md:text-4xl font-editorial italic tracking-tight leading-none">The Archive</h2>
-                <p class="text-[9px] uppercase tracking-widest text-zinc-500 mb-1">Selected Works</p>
+                <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Selected Projects</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="group cursor-pointer project-card" data-is-video="{{ project.is_video }}" data-source="{% if project.is_video %}{{ url_for('static', filename=project.video) }}{% else %}{% if 'http' in project.image %}{{ project.image }}{% else %}{{ url_for('static', filename=project.image) }}{% endif %}{% endif %}">
+                <div class="reveal group cursor-pointer project-card" data-is-video="{{ project.is_video }}" data-source="{% if project.is_video %}{{ url_for('static', filename=project.video) }}{% else %}{% if 'http' in project.image %}{{ project.image }}{% else %}{{ url_for('static', filename=project.image) }}{% endif %}{% endif %}">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-8 relative shadow-2xl">
                         {% if project.is_video %}
-                        <video loop muted playsinline preload="metadata" class="project-video-element w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
+                        <video loop muted playsinline preload="none" class="project-video-element w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
                             <source src="{{ url_for('static', filename=project.video) }}" type="video/mp4">
                         </video>
                         <div class="absolute top-4 right-4 text-white/50 group-hover:text-white transition"><i class="fas fa-play text-[8px]"></i></div>
                         {% else %}
-                        <img src="{% if 'http' in project.image %}{{ project.image }}{% else %}{{ url_for('static', filename=project.image) }}{% endif %}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000">
+                        <img src="{% if 'http' in project.image %}{{ project.image }}{% else %}{{ url_for('static', filename=project.image) }}{% endif %}" loading="lazy" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000">
                         {% endif %}
                     </div>
                     <div class="px-2"><h3 class="text-[14px] font-bold uppercase tracking-widest">{{ project.title }}</h3></div>
@@ -77,27 +87,36 @@
             </div>
         </div>
     </section>
-    <!-- Bio: Aligned Portrait -->
+
+    <!-- Bio Section -->
     <section id="content" class="py-32 md:py-48 px-6 bg-[var(--bg-primary)]">
-        <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            <div class="lg:col-span-4">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div class="reveal lg:col-span-4">
                 <div class="aspect-[3/4] overflow-hidden bg-zinc-900 p-1 shadow-2xl border border-[var(--border-color)]">
-                    <img src="{{ url_for('static', filename=bio.content_photo) }}" alt="Laurine" class="w-full h-full object-cover">
+                    <img src="{{ url_for('static', filename=bio.content_photo) }}" alt="VBL" class="w-full h-full object-cover">
                 </div>
             </div>
-            <div class="lg:col-span-8 pt-2">
+            <div class="reveal lg:col-span-8 pt-2">
                 <h2 class="text-5xl md:text-8xl font-editorial italic mb-8 leading-tight">Visions in <br>Motion.</h2>
                 <p class="text-xl md:text-2xl text-[var(--text-secondary)] leading-relaxed mb-10 font-light max-w-3xl">{{ bio.bio }}</p>
                 <div class="flex gap-10 text-[10px] uppercase tracking-widest font-bold opacity-50"><span>{{ bio.location }}</span><span>Est. {{ bio.est_year }}</span></div>
             </div>
         </div>
     </section>
+
     <footer class="py-40 text-center border-t border-[var(--border-color)]">
-        <a href="mailto:{{ bio.contact.email }}" class="text-2xl md:text-4xl font-editorial italic hover:opacity-40 transition border-b border-[var(--text-primary)] pb-4">{{ bio.contact.email }}</a>
+        <a href="mailto:{{ bio.contact.email }}" class="reveal text-2xl md:text-4xl font-editorial italic hover:opacity-40 transition border-b border-[var(--text-primary)] pb-4">{{ bio.contact.email }}</a>
         <div class="mt-20 flex justify-center space-x-12 text-[10px] tracking-[0.4em] uppercase text-zinc-500 font-bold"><a href="https://{{ bio.contact.instagram }}" target="_blank">Instagram</a></div>
     </footer>
+
     <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition"><i id="theme-icon" class="fas fa-sun"></i></button>
+
     <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
         const cursor = document.getElementById('custom-cursor');
         let isHovering = false;
         document.addEventListener('mousemove', (e) => {
@@ -107,6 +126,7 @@
                 cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1}) rotate(${isHovering ? 144 : 0}deg)`;
             });
         });
+
         document.querySelectorAll('.project-card').forEach(card => {
             const isVideo = card.getAttribute('data-is-video') === 'True';
             const source = card.getAttribute('data-source');
@@ -118,9 +138,15 @@
                 if (isVideo) { content.innerHTML = `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${source}" type="video/mp4"></video>`; }
                 else { content.innerHTML = `<img src="${source}" class="max-w-full max-h-[85vh] object-contain shadow-2xl">`; }
             });
-            card.onmouseenter = () => { if(isVideo && vid) vid.play().catch(e => {}); isHovering = true; };
-            card.onmouseleave = () => { if(isVideo && vid) vid.pause(); isHovering = false; };
+            if (isVideo && vid) {
+                card.onmouseenter = () => { vid.play().catch(e => {}); isHovering = true; };
+                card.onmouseleave = () => { vid.pause(); isHovering = false; };
+            } else {
+                card.onmouseenter = () => isHovering = true;
+                card.onmouseleave = () => isHovering = false;
+            }
         });
+
         function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); document.getElementById('lightbox-content').innerHTML = ''; }
         function updateHoverListeners() { document.querySelectorAll('a, button').forEach(item => { item.onmouseenter = () => isHovering = true; item.onmouseleave = () => isHovering = false; }); }
         updateHoverListeners();
