@@ -16,24 +16,37 @@ BIO = {
     }
 }
 
-# EXACT CASE MATCHING FOR YOUR CLOUDINARY FILES
+# 1. THE TOP 6 FOR HOME PAGE (Curated)
 PROJECTS = [
-    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"]},
-    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"]},
-    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
-    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262766/city-project.mp4", "is_video": True, "tags": ["Urban"]},
-    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"]},
-    {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"]}
+    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa • 4:3"},
+    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Commercial"},
+    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"], "meta": "Stills"},
+    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262766/city-project.mp4", "is_video": True, "tags": ["Urban"], "meta": "Sony FX3"},
+    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"], "meta": "Portrait"},
+    {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"], "meta": "Visual ID"}
 ]
 
-# Smart Archive Loader (Checks up to 25)
+# 2. ADDITIONAL VIDEOS FOR FULL WORKS
+archive_vids = [20, 21, 22]
+for num in archive_vids:
+    PROJECTS.append({
+        "id": f"v-work-{num}",
+        "title": f"Work {num}",
+        "video": f"https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/work-{num}.mp4",
+        "is_video": True,
+        "tags": ["Motion"],
+        "meta": "Cinematography"
+    })
+
+# 3. ARCHIVE PHOTOS (Work 1 - 19)
 for i in range(1, 20):
     PROJECTS.append({
-        "id": f"w{i}",
+        "id": f"work-{i}",
         "title": f"Project {i}",
         "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}.jpg",
         "is_video": False,
-        "tags": ["Archive"]
+        "tags": ["Archive"],
+        "meta": "VBL Production"
     })
 
 SKILLS = [{"name": "Cinema", "level": 98}]
