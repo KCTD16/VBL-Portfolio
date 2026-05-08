@@ -25,10 +25,9 @@
         }
         .reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { display: inline-block; animation: marquee 25s linear infinite; }
-        .parallax-img { transition: transform 0.1s ease-out; will-change: transform; }
+        .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; }
     </style>
 </head>
 <body id="home">
@@ -44,27 +43,21 @@
         </div>
     </nav>
 
-    <div id="lightbox" onclick="closeLightbox()">
-        <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
-        <div id="lightbox-meta" class="text-[10px] uppercase tracking-[0.5em] text-white/40 pb-10"></div>
-    </div>
+    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
 
-    <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center bg-black">
-        <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover opacity-60">
+        <video id="hero-video" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
         <h1 class="relative z-10 text-7xl md:text-9xl font-editorial italic tracking-tighter text-white">{{ bio.name }}</h1>
     </section>
 
-    <!-- Banner -->
     <div class="py-4 bg-white text-black overflow-hidden whitespace-nowrap">
         <div class="animate-marquee text-[9px] font-bold uppercase tracking-[0.6em]">
-            MANCHESTER / LONDON / GLOBAL &nbsp;•&nbsp; AVAILABLE FOR COLLABORATION 2026 &nbsp;•&nbsp; CINEMATOGRAPHY &nbsp;•&nbsp; VISUALS BY LAURINE &nbsp;•&nbsp; 
+            MANCHESTER / LONDON / GLOBAL &nbsp;•&nbsp; AVAILABLE FOR COLLABORATION 2026 &nbsp;•&nbsp; VISUALS BY LAURINE &nbsp;•&nbsp; 
         </div>
     </div>
 
-    <!-- The Archive (3x3 Grid) -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
             <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
@@ -76,7 +69,8 @@
                 <div class="reveal group cursor-pointer project-card" data-meta="{{ project.meta }}" onclick="openLightbox('{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
-                            <video loop muted playsinline class="w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
+                            <!-- Added project-vid class for the audio script -->
+                            <video loop muted playsinline class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
                         {% else %}
                             <img src="{{ project.image }}" loading="lazy" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105">
                         {% endif %}
@@ -88,26 +82,21 @@
         </div>
     </section>
 
-    <!-- Bio (Portrait Color + Parallax) -->
     <section id="content" class="py-40 px-6 md:px-12 bg-[var(--bg-primary)] flex flex-col md:flex-row gap-20 items-start">
         <div class="reveal w-full md:w-1/4">
             <div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]">
-                <img src="{{ bio.content_photo }}" id="parallax-bio" class="parallax-img w-full h-full object-cover scale-110">
+                <img src="{{ bio.content_photo }}" id="parallax-bio" class="w-full h-full object-cover scale-110">
             </div>
         </div>
         <div class="reveal md:pt-4">
             <h2 class="text-5xl md:text-8xl font-editorial italic mb-10 leading-tight">Visions in <br>Motion.</h2>
-            <p class="text-xl md:text-2xl font-light max-w-2xl text-[var(--text-secondary)] leading-relaxed">{{ bio.bio }}</p>
+            <p class="text-xl md:text-2xl font-light max-w-2xl text-zinc-400 leading-relaxed">{{ bio.bio }}</p>
         </div>
     </section>
 
     <footer class="py-40 text-center border-t border-[var(--border-color)]">
-        <div class="flex flex-col items-center gap-6">
-            <p class="text-[10px] uppercase tracking-[0.5em] opacity-40 mb-2">Get in Touch</p>
-            <span class="text-2xl md:text-4xl font-editorial italic tracking-tight">{{ bio.contact.email }}</span>
-            <div class="w-12 h-[1px] bg-[var(--border-color)] my-4"></div>
-            <a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold opacity-60 hover:opacity-100 transition">Instagram: visualsbylaurine</a>
-        </div>
+        <span class="text-2xl md:text-4xl font-editorial italic tracking-tight">{{ bio.contact.email }}</span>
+        <div class="mt-8"><a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold opacity-60 hover:opacity-100 transition">Instagram: visualsbylaurine</a></div>
     </footer>
 
     <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[10000] hover:scale-110 transition">
@@ -115,48 +104,53 @@
     </button>
 
     <script>
+        // --- Smart Audio Engine ---
+        let hasInteracted = false;
+        document.addEventListener('click', () => { hasInteracted = true; }, { once: true });
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            const vid = card.querySelector('video.project-vid');
+            card.onmouseenter = () => {
+                if (vid) {
+                    if (hasInteracted) vid.muted = false; // Unmute if user clicked once
+                    vid.play().catch(e => {});
+                }
+                isHovering = true;
+            };
+            card.onmouseleave = () => {
+                if (vid) {
+                    vid.pause();
+                    vid.muted = true; // Always mute when leaving
+                }
+                isHovering = false;
+            };
+        });
+
+        // Preloader & Reveal
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
         const obs = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         
+        // Cursor & Parallax
+        const cursor = document.getElementById('custom-cursor');
+        let isHovering = false;
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.opacity = '1';
+            window.requestAnimationFrame(() => {
+                cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`;
+            });
+        });
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const img = document.getElementById('parallax-bio');
             if (img) img.style.transform = `translateY(${scrolled * 0.04}px) scale(1.1)`;
         });
 
-        const cursor = document.getElementById('custom-cursor');
-        let isHovering = false;
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.opacity = '1';
-            let tX = e.clientX; let tY = e.clientY;
-            document.querySelectorAll('.nav-link').forEach(l => {
-                const r = l.getBoundingClientRect();
-                const d = Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2));
-                if (d < 60) { tX = r.left + r.width/2; tY = r.top + r.height/2; cursor.style.width="50px"; cursor.style.height="50px"; }
-                else { cursor.style.width="35px"; cursor.style.height="35px"; }
-            });
-            window.requestAnimationFrame(() => { cursor.style.transform = `translate3d(${tX}px, ${tY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`; });
-        });
-
-        let audioStarted = false;
-        document.addEventListener('click', () => {
-            if(!audioStarted) { document.querySelectorAll('video').forEach(v => { v.muted = false; v.play().catch(e=>{}); }); audioStarted = true; }
-        }, { once: true });
-
         function openLightbox(isVid, src) {
             const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
-            const m = event.currentTarget.getAttribute('data-meta');
             document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[80vh] object-contain">`;
-            document.getElementById('lightbox-meta').innerText = m || "";
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-        
-        document.querySelectorAll('.project-card').forEach(card => {
-            const vid = card.querySelector('video');
-            card.onmouseenter = () => { if(vid) vid.play(); isHovering = true; };
-            card.onmouseleave = () => { if(vid) vid.pause(); isHovering = false; };
-        });
         document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
         function toggleTheme() {
             const h = document.documentElement; const i = document.getElementById('theme-icon');
