@@ -5,15 +5,14 @@ from data import BIO, PROJECTS, SKILLS
 
 app = Flask(__name__)
 
-# This tells browsers to SAVE your images locally for 1 year so they load instantly next time
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000 
-
 @app.context_processor
 def inject_methods():
     def get_url(filename):
         if not filename: return ""
-        if filename.startswith('http'): return filename
-        # Ensure filenames are safe
+        # If it's a Cloudinary link, use it directly
+        if filename.startswith('http'):
+            return filename
+        # Fallback for any local files still in static
         return url_for('static', filename=filename)
     return dict(get_url=get_url)
 
