@@ -5,6 +5,7 @@ from data import BIO, PROJECTS, SKILLS
 
 app = Flask(__name__)
 
+# This helper makes sure Cloudinary links and local links both work
 @app.context_processor
 def inject_methods():
     def get_url(filename):
@@ -19,6 +20,7 @@ def index():
 
 @app.route('/archive')
 def archive():
+    # Jumble for the Archive page
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
