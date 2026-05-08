@@ -1,5 +1,6 @@
 import os
 
+# Get the path where Render stores your files
 basedir = os.path.abspath(os.path.dirname(__file__))
 static_folder = os.path.join(basedir, 'static')
 
@@ -19,13 +20,13 @@ BIO = {
     }
 }
 
-# The main 6 (Manually checking extensions)
+# MANUALLY MATCHED TO YOUR SIDEBAR SCREENSHOT
 PROJECTS = [
     {"id": "1", "title": "KLAT x Alex Spencer", "video": "klat-project.MP4", "is_video": True, "tags": ["Cinema"]},
     {"id": "2", "title": "KLAT MAG", "video": "Noir-project.mp4", "is_video": True, "tags": ["Editorial"]},
-    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
+    {"id": "3", "title": "STYLE 'N' SHOW EP2 STILL", "image": "aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
     {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "city-project.mp4", "is_video": True, "tags": ["Urban"]},
-    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "shadow-form.JPG", "is_video": False, "tags": ["Editorial"]},
+    {"id": "5", "title": "BLACK GIRL HAIR SHOP STILL", "image": "shadow-form.JPG", "is_video": False, "tags": ["Editorial"]},
     {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "final-reel.JPG", "is_video": False, "tags": ["Brand"]}
 ]
 
