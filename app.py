@@ -11,7 +11,6 @@ def index():
 
 @app.route('/archive')
 def archive():
-    # Make sure this matches the filename templates/gallery.html
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
