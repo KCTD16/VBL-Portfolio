@@ -5,7 +5,9 @@ from data import BIO, PROJECTS, SKILLS
 
 app = Flask(__name__)
 
-# This is the "Secret Sauce" that fixed your Home Page images
+# Cache control for speed
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000 
+
 @app.context_processor
 def inject_methods():
     def get_url(filename):
@@ -16,12 +18,12 @@ def inject_methods():
 
 @app.route('/')
 def index():
-    # Only Home Page (Perfect as is)
+    # Curated Top 6 for Home
     return render_template('index.html', bio=BIO, projects=PROJECTS[:6], skills=SKILLS)
 
 @app.route('/archive')
 def archive():
-    # Full Works Page logic
+    # Randomized Full Works for Archive
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
