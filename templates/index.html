@@ -11,7 +11,17 @@
         :root { --bg-primary: #ffffff; --text-primary: #000000; --border-color: rgba(0,0,0,0.08); }
         [data-theme='option1'] { --bg-primary: #0a0a0c; --text-primary: #ffffff; --border-color: rgba(255,255,255,0.1); }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        /* Skeleton Loader Effect */
+        .image-container { background: #111; position: relative; overflow: hidden; }
+        .image-container::after {
+            content: ""; position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: 35px; height: 35px; background-color: white;
@@ -19,14 +29,11 @@
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             will-change: transform; transition: opacity 0.3s ease; opacity: 0;
         }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .font-editorial { font-family: 'Playfair Display', serif; }
         #lightbox.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        #lightbox { transition: all 0.4s ease; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
-        nav a { position: relative; }
-        nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 1px; background: currentColor; transition: width 0.3s ease; }
-        nav a:hover::after { width: 100%; }
+        #lightbox { transition: all 0.3s ease; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body id="home">
@@ -39,20 +46,25 @@
             <a href="#content">Content</a>
         </div>
     </nav>
+
     <div id="lightbox" class="hidden">
-        <button onclick="closeLightbox()" class="absolute top-10 right-10 text-white z-[1001] hover:scale-125 transition"><i class="fas fa-times text-2xl"></i></button>
+        <button onclick="closeLightbox()" class="absolute top-10 right-10 text-white z-[1001]"><i class="fas fa-times text-2xl"></i></button>
         <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
     </div>
+
+    <!-- Hero: Prioritized -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
         <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60">
             <source src="{{ get_url(bio.hero_video) }}" type="video/mp4">
         </video>
-        <div class="absolute inset-0 bg-black/20 z-1 pointer-events-none"></div>
-        <div class="relative z-10 text-center text-white pointer-events-none px-6 mt-12">
+        <div class="absolute inset-0 bg-black/20 z-1"></div>
+        <div class="relative z-10 text-center text-white px-6 mt-12">
             <h1 class="text-8xl md:text-[11rem] font-editorial italic tracking-tighter leading-none shadow-2xl">{{ bio.name }}</h1>
             <p class="text-[10px] tracking-[0.7em] uppercase text-zinc-300 mt-10 font-bold">{{ bio.role }}</p>
         </div>
     </section>
+
+    <!-- Gallery: Turbo Lazy Loading -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
             <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10 px-2">
@@ -61,13 +73,17 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" data-is-video="{{ project.is_video }}" data-source="{% if project.is_video %}{{ get_url(project.video) }}{% else %}{{ get_url(project.image) }}{% endif %}">
-                    <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-8 relative shadow-2xl">
+                <div class="reveal group cursor-pointer project-card" 
+                     data-is-video="{{ project.is_video }}" 
+                     data-source="{{ get_url(project.video if project.is_video else project.image) }}">
+                    
+                    <div class="aspect-[16/11] image-container overflow-hidden bg-zinc-900 mb-8 relative shadow-2xl">
                         {% if project.is_video %}
+                        <!-- Video doesn't even have a source yet to save speed -->
                         <video loop muted playsinline preload="none" class="project-video-element w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
-                            <source src="{{ get_url(project.video) }}" type="video/mp4">
+                            <source src="" data-src="{{ get_url(project.video) }}" type="video/mp4">
                         </video>
-                        <div class="absolute top-4 right-4 text-white/50 group-hover:text-white transition"><i class="fas fa-play text-[8px]"></i></div>
+                        <div class="absolute top-4 right-4 text-white/50"><i class="fas fa-play text-[8px]"></i></div>
                         {% else %}
                         <img src="{{ get_url(project.image) }}" loading="lazy" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000">
                         {% endif %}
@@ -78,11 +94,13 @@
             </div>
         </div>
     </section>
+
+    <!-- Bio Section -->
     <section id="content" class="py-32 md:py-48 px-6 bg-[var(--bg-primary)]">
         <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             <div class="reveal lg:col-span-4">
-                <div class="aspect-[3/4] overflow-hidden bg-zinc-900 p-1 shadow-2xl border border-[var(--border-color)]">
-                    <img src="{{ get_url(bio.content_photo) }}" alt="VBL" class="w-full h-full object-cover">
+                <div class="aspect-[3/4] image-container overflow-hidden bg-zinc-900 p-1 shadow-2xl border border-[var(--border-color)]">
+                    <img src="{{ get_url(bio.content_photo) }}" alt="VBL" class="w-full h-full object-cover" loading="lazy">
                 </div>
             </div>
             <div class="reveal lg:col-span-8 pt-2">
@@ -92,51 +110,39 @@
             </div>
         </div>
     </section>
+
     <footer class="py-40 text-center border-t border-[var(--border-color)]">
         <a href="mailto:{{ bio.contact.email }}" class="reveal text-2xl md:text-4xl font-editorial italic hover:opacity-40 transition border-b border-[var(--text-primary)] pb-4">{{ bio.contact.email }}</a>
         <div class="mt-20 flex justify-center space-x-12 text-[10px] tracking-[0.4em] uppercase text-zinc-500 font-bold"><a href="https://{{ bio.contact.instagram }}" target="_blank">Instagram</a></div>
     </footer>
+
     <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition"><i id="theme-icon" class="fas fa-sun"></i></button>
+
     <script>
-        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.1 });
+        // 1. Smooth Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        const cursor = document.getElementById('custom-cursor');
-        let isHovering = false;
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.opacity = '1';
-            const x = e.clientX; const y = e.clientY;
-            window.requestAnimationFrame(() => {
-                cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1}) rotate(${isHovering ? 144 : 0}deg)`;
-            });
-        });
+
+        // 2. Turbo Video Hover (Only loads source on hover)
         document.querySelectorAll('.project-card').forEach(card => {
             const isVideo = card.getAttribute('data-is-video') === 'True';
-            const source = card.getAttribute('data-source');
-            const vid = card.querySelector('.project-video-element');
-            card.addEventListener('click', () => {
-                const lb = document.getElementById('lightbox');
-                const content = document.getElementById('lightbox-content');
-                lb.classList.remove('hidden');
-                if (isVideo) { content.innerHTML = `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${source}" type="video/mp4"></video>`; }
-                else { content.innerHTML = `<img src="${source}" class="max-w-full max-h-[85vh] object-contain shadow-2xl">`; }
+            const vidElement = card.querySelector('.project-video-element');
+            
+            card.addEventListener('mouseenter', () => {
+                if (isVideo && vidElement) {
+                    const source = vidElement.querySelector('source');
+                    if (!source.src) {
+                        source.src = source.getAttribute('data-src');
+                        vidElement.load();
+                    }
+                    vidElement.play().catch(e => {});
+                }
             });
-            if (isVideo && vid) {
-                card.onmouseenter = () => { vid.play().catch(e => {}); isHovering = true; };
-                card.onmouseleave = () => { vid.pause(); isHovering = false; };
-            } else {
-                card.onmouseenter = () => isHovering = true;
-                card.onmouseleave = () => isHovering = false;
-            }
+            card.addEventListener('mouseleave', () => { if (vidElement) vidElement.pause(); });
         });
-        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); document.getElementById('lightbox-content').innerHTML = ''; }
-        function updateHoverListeners() { document.querySelectorAll('a, button').forEach(item => { item.onmouseenter = () => isHovering = true; item.onmouseleave = () => isHovering = false; }); }
-        updateHoverListeners();
-        function toggleTheme() { const html = document.documentElement; html.getAttribute('data-theme') === 'option1' ? html.setAttribute('data-theme', '') : html.setAttribute('data-theme', 'option1'); }
-        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
-        const heroVid = document.getElementById('hero-video');
-        const play = () => { if(heroVid) heroVid.play().catch(e => {}); };
-        window.addEventListener('load', play);
-        document.addEventListener('mousedown', play, {once: true});
-    </script>
-</body>
-</html>
+
+        // 3. Lightbox & Cursor (Standard logic)
+        function openLightbox(isVideo, source) {
+            const l

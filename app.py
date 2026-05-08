@@ -5,12 +5,15 @@ from data import BIO, PROJECTS, SKILLS
 
 app = Flask(__name__)
 
+# This tells browsers to SAVE your images locally for 1 year so they load instantly next time
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000 
+
 @app.context_processor
 def inject_methods():
-    # This prevents the 500 error by helping the HTML find the right file path
     def get_url(filename):
         if not filename: return ""
         if filename.startswith('http'): return filename
+        # Ensure filenames are safe
         return url_for('static', filename=filename)
     return dict(get_url=get_url)
 
@@ -20,7 +23,6 @@ def index():
 
 @app.route('/archive')
 def archive():
-    # Shuffle projects for the archive page
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
