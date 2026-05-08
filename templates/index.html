@@ -134,8 +134,9 @@
         function toggleTheme() { const html = document.documentElement; html.getAttribute('data-theme') === 'option1' ? html.setAttribute('data-theme', '') : html.setAttribute('data-theme', 'option1'); }
         document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
         const heroVid = document.getElementById('hero-video');
-        window.addEventListener('load', () => { heroVid.play().catch(e => {}); });
-        document.addEventListener('mousedown', () => { heroVid.play().catch(e => {}); }, {once: true});
+        const play = () => { if(heroVid) heroVid.play().catch(e => {}); };
+        window.addEventListener('load', play);
+        document.addEventListener('mousedown', play, {once: true});
     </script>
 </body>
 </html>

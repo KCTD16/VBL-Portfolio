@@ -11,11 +11,12 @@ def index():
 
 @app.route('/archive')
 def archive():
-    # Fix: Ensure random is working and we pass projects correctly
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
+    # Ensure this looks for gallery.html
     return render_template('gallery.html', bio=BIO, projects=jumbled)
 
 if __name__ == '__main__':
+    # Correct port handling for Render vs Local
     port = int(os.environ.get("PORT", 5001))
     app.run(host='0.0.0.0', port=port)
