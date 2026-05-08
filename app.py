@@ -7,12 +7,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Only Home Page Top 6 - Curated Order
     return render_template('index.html', bio=BIO, projects=PROJECTS[:6], skills=SKILLS)
 
 @app.route('/archive')
 def archive():
-    # Full Works: Random mix of everything
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
