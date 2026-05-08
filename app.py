@@ -1,16 +1,18 @@
 import os
 import random
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 from data import BIO, PROJECTS, SKILLS
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
+    # Only Home Page (Curated Top 6)
     return render_template('index.html', bio=BIO, projects=PROJECTS[:6], skills=SKILLS)
 
 @app.route('/archive')
 def archive():
+    # Full Works Page (All projects jumbled)
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
