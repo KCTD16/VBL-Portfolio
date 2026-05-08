@@ -1,5 +1,9 @@
 import os
 
+# Get the absolute path to the static folder for Render
+basedir = os.path.abspath(os.path.dirname(__file__))
+static_folder = os.path.join(basedir, 'static')
+
 BIO = {
     "name": "VBL",
     "full_name": "Visuals By Laurine",
@@ -25,17 +29,20 @@ PROJECTS = [
     {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "final-reel.jpg", "is_video": False, "tags": ["Brand"]}
 ]
 
+# SMART LOADER: Checks for all common extensions
 for i in range(1, 41):
-    v_name = f"work-{i}.mp4"
-    if os.path.exists(os.path.join("static", v_name)):
-        PROJECTS.append({"id": f"v{i}", "title": f"Work {i}", "video": v_name, "is_video": True, "tags": ["Motion"]})
-        continue
-    j_name = f"work-{i}.jpg"
-    if os.path.exists(os.path.join("static", j_name)):
-        PROJECTS.append({"id": f"j{i}", "title": f"Work {i}", "image": j_name, "is_video": False, "tags": ["Project"]})
-        continue
-    p_name = f"work-{i}.png"
-    if os.path.exists(os.path.join("static", p_name)):
-        PROJECTS.append({"id": f"p{i}", "title": f"Work {i}", "image": p_name, "is_video": False, "tags": ["Project"]})
-
+    exts = ['.mp4', '.MP4', '.jpg', '.JPG', '.png', '.PNG', '.webp', '.WEBP', '.jpeg', '.JPEG']
+    found = False
+    
+    for ext in exts:
+        filename = f"work-{i}{ext}"
+        if os.path.exists(os.path.join(static_folder, filename)):
+            is_vid = ext.lower() == '.mp4'
+            entry = {"id": f"w{i}", "title": f"Work {i}", "is_video": is_vid, "tags": ["Archive"]}
+            if is_vid: entry["video"] = filename
+            else: entry["image"] = filename
+            PROJECTS.append(entry)
+            found = True
+            break # Stop looking once we find one version of the file
+            
 SKILLS = [{"name": "Cinema", "level": 98}]
