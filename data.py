@@ -16,28 +16,25 @@ BIO = {
     }
 }
 
-# The Top 6 (Exact names from your files)
 PROJECTS = [
-    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"]},
-    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"]},
-    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"]},
-    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/city-project.mp4", "is_video": True, "tags": ["Urban"]},
-    {"id": "5", "title": "BLACK GIRL HAIR SHOP STILL", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"]},
-    {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"]}
+    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa • 35mm • 4:3"},
+    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Blackmagic 6K • Prores 422"},
+    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"], "meta": "Editorial Photography"},
+    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/city-project.mp4", "is_video": True, "tags": ["Urban"], "meta": "Sony FX3 • Handheld"},
+    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"], "meta": "Studio Lighting • Stills"},
+    {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"], "meta": "Visual ID"}
 ]
 
-# Smart Loader for all work-1 through work-40
+# Smart Loader for the archive (using the same f_auto magic)
 for i in range(1, 41):
-    exts = [('.mp4', True), ('.MP4', True), ('.jpg', False), ('.JPG', False), ('.webp', False)]
-    # In Cloud-only mode, we assume the files exist based on your naming convention
-    # If a file doesn't exist in Cloudinary, it will just show as a broken link.
-    if i > 6: # Avoid duplicating the top 6
+    if i > 6:
         PROJECTS.append({
-            "id": f"archive-{i}",
+            "id": f"w{i}",
             "title": f"Project {i}",
             "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}.jpg",
             "is_video": False,
-            "tags": ["Archive"]
+            "tags": ["Archive"],
+            "meta": "VBL Production"
         })
 
 SKILLS = [{"name": "Cinema", "level": 98}]
