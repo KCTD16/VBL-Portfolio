@@ -8,84 +8,81 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-primary: #ffffff; --text-primary: #000000; --border-color: rgba(0,0,0,0.08); --accent: #FA7301; }
+        :root { --bg-primary: #ffffff; --text-primary: #000000; --border-color: rgba(0,0,0,0.08); }
         [data-theme='option1'] { --bg-primary: #0a0a0c; --text-primary: #ffffff; --border-color: rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
-        #preloader { position: fixed; inset: 0; z-index: 20000; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
-        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: all 0.5s ease; overflow-x: hidden; }
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
         #custom-cursor {
-            position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; 
-            z-index: 10000; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; z-index: 9999999; mix-blend-mode: difference;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             will-change: transform; transition: opacity 0.3s ease; opacity: 0;
         }
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; }
+        .font-editorial { font-family: 'Playfair Display', serif; }
+        #lightbox.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        #lightbox { transition: all 0.4s ease; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body id="home">
-    <div id="preloader"><div class="loader-text">VBL</div></div>
     <div id="custom-cursor"></div>
-
+    
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-12 flex justify-between items-center mix-blend-difference text-white">
         <div class="font-editorial italic text-2xl">VBL</div>
-        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]">
+        <div class="flex gap-8 md:gap-12 text-[10px] uppercase font-bold tracking-[0.4em]">
             <a href="/">Home</a>
             <a href="{{ url_for('archive') }}">Full Works</a>
             <a href="#content">Content</a>
         </div>
     </nav>
 
-    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
+    <div id="lightbox" class="hidden" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
 
+    <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center bg-black">
         <video id="hero-video" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
-        <h1 class="relative z-10 text-7xl md:text-[11rem] font-editorial italic tracking-tighter text-white">{{ bio.name }}</h1>
+        <div class="absolute inset-0 bg-black/20 z-1"></div>
+        <h1 class="relative z-10 text-8xl md:text-[11rem] font-editorial italic tracking-tighter text-white shadow-2xl">{{ bio.name }}</h1>
     </section>
 
-    <div class="py-4 bg-white text-black overflow-hidden whitespace-nowrap">
-        <div class="animate-marquee text-[9px] font-bold uppercase tracking-[0.6em]">
-            MANCHESTER / LONDON / GLOBAL &nbsp;•&nbsp; AVAILABLE FOR COLLABORATION 2026 &nbsp;•&nbsp; CINEMATOGRAPHY &nbsp;•&nbsp; VISUALS BY LAURINE &nbsp;•&nbsp; 
-        </div>
-    </div>
-
+    <!-- The Archive (3x3 Grid) -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
-            <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
+            <div class="flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
                 <h2 class="text-3xl font-editorial italic">The Archive</h2>
                 <p class="text-[10px] uppercase tracking-widest opacity-40">Selected Projects</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" onclick="openLightbox('{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                <div class="group cursor-pointer project-card" onclick="openLightbox('{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
                             <video loop muted playsinline class="w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
                         {% else %}
-                            <img src="{{ project.image }}" loading="lazy" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105">
+                            <img src="{{ project.image }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105">
                         {% endif %}
                     </div>
-                    <h3 class="uppercase text-[11px] font-bold tracking-widest">{{ project.title }}</h3>
+                    <h3 class="uppercase text-[11px] font-bold tracking-widest px-2">{{ project.title }}</h3>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </section>
 
-    <section id="content" class="py-40 px-6 md:px-12 flex flex-col md:flex-row gap-20 items-start">
-        <div class="reveal w-full md:w-1/4"><div class="aspect-[3/4] overflow-hidden shadow-2xl"><img src="{{ bio.content_photo }}" class="w-full h-full object-cover"></div></div>
-        <div class="reveal md:pt-4">
-            <h2 class="text-5xl md:text-8xl font-editorial italic mb-10 leading-tight">Visions in <br>Motion.</h2>
-            <p class="text-xl md:text-2xl font-light max-w-2xl text-zinc-400 leading-relaxed">{{ bio.bio }}</p>
+    <!-- Bio (Portrait + Color) -->
+    <section id="content" class="py-40 px-6 md:px-12 bg-[var(--bg-primary)]">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div class="lg:col-span-4">
+                <div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]">
+                    <img src="{{ bio.content_photo }}" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div class="lg:col-span-8 pt-2">
+                <h2 class="text-5xl md:text-8xl font-editorial italic mb-10 leading-tight">Visions in <br>Motion.</h2>
+                <p class="text-xl md:text-2xl font-light max-w-2xl text-[var(--text-secondary)] leading-relaxed">{{ bio.bio }}</p>
+                <div class="mt-10 flex gap-8 text-[10px] uppercase tracking-widest opacity-40"><span>Manchester, UK</span><span>Est. {{ bio.est_year }}</span></div>
+            </div>
         </div>
     </section>
 
@@ -94,48 +91,35 @@
         <div class="mt-8"><a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold opacity-60 hover:opacity-100 transition">Instagram: visualsbylaurine</a></div>
     </footer>
 
-    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[10000] hover:scale-110 transition">
+    <!-- B&W TOGGLE -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition">
         <i id="theme-icon" class="fas fa-moon"></i>
     </button>
 
     <script>
-        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
-        const obs = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-        
         const cursor = document.getElementById('custom-cursor');
-        let isHovering = false;
         document.addEventListener('mousemove', (e) => {
             cursor.style.opacity = '1';
             cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`;
         });
-
-        // AUTO-AUDIO LOGIC: Triggers on first click
-        let audioStarted = false;
-        document.addEventListener('click', () => {
-            if(!audioStarted) {
-                document.querySelectorAll('video').forEach(v => { v.muted = false; v.play(); });
-                audioStarted = true;
-            }
-        }, { once: true });
-
+        let isHovering = false;
         function openLightbox(isVid, src) {
-            const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
-            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
+            document.getElementById('lightbox').classList.remove('hidden');
+            const content = document.getElementById('lightbox-content');
+            content.innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[85vh]"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[85vh] object-contain">`;
         }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-        
+        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+        function toggleTheme() {
+            const h = document.documentElement; const i = document.getElementById('theme-icon');
+            if (h.getAttribute('data-theme') === 'option1') { h.setAttribute('data-theme', ''); i.className = 'fas fa-moon'; }
+            else { h.setAttribute('data-theme', 'option1'); i.className = 'fas fa-sun'; }
+        }
         document.querySelectorAll('.project-card').forEach(card => {
             const vid = card.querySelector('video');
             card.onmouseenter = () => { if(vid) vid.play(); isHovering = true; };
             card.onmouseleave = () => { if(vid) vid.pause(); isHovering = false; };
         });
         document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
-        function toggleTheme() {
-            const h = document.documentElement; const i = document.getElementById('theme-icon');
-            if (h.getAttribute('data-theme') === 'option1') { h.setAttribute('data-theme', ''); i.className = 'fas fa-moon'; }
-            else { h.setAttribute('data-theme', 'option1'); i.className = 'fas fa-sun'; }
-        }
     </script>
 </body>
 </html>
