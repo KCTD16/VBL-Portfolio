@@ -17,21 +17,24 @@ BIO = {
 }
 
 PROJECTS = [
-    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa • 35mm • 4:3"},
-    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Blackmagic 6K • Prores 422"},
-    {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"], "meta": "Editorial Photography"},
-    {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/city-project.mp4", "is_video": True, "tags": ["Urban"], "meta": "Sony FX3 • Handheld"},
-    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"], "meta": "Studio Lighting • Stills"},
-    {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"], "meta": "Visual ID"}
+    {"id": "v-hero", "title": "VBL Showreel", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262526/vblvid.mp4", "is_video": True, "tags": ["Motion"], "meta": "Director's Cut"},
+    {"id": "v-city", "title": "City Project", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262766/city-project.mp4", "is_video": True, "tags": ["Urban"], "meta": "4K Anamorphic"},
+    {"id": "v-20", "title": "Work 20", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/work-20.mp4", "is_video": True, "tags": ["Motion"], "meta": "Cinematography"},
+    {"id": "v-21", "title": "Work 21", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/work-21.mp4", "is_video": True, "tags": ["Motion"], "meta": "Visual Narrative"},
+    {"id": "v-22", "title": "Work 22", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/work-22.mp4", "is_video": True, "tags": ["Motion"], "meta": "Experimental"},
+    {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa"},
+    {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/Noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Commercial"}
 ]
 
-# Smart Loader for the archive (using the same f_auto magic)
+# Smart Archive Loader
 for i in range(1, 41):
-    if i > 6:
+    if i not in [20, 21, 22]:
+        # Using f_auto without an extension is the safest way for Cloudinary
+        link = f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}"
         PROJECTS.append({
             "id": f"w{i}",
             "title": f"Project {i}",
-            "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}.jpg",
+            "image": link, 
             "is_video": False,
             "tags": ["Archive"],
             "meta": "VBL Production"
