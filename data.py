@@ -8,14 +8,14 @@ BIO = {
     "experience": "8+ Years",
     "est_year": "2020", 
     "bio": "I create cinematic visuals and authentic imagery that turn moments into stories. Through photography and videography, my goal is to craft work that feels real, evokes emotion, and leaves a lasting impact.",
-    # f_auto = automatic format (WebP for Chrome, etc), q_auto = automatic compression
     "hero_video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262526/vblvid.mp4", 
     "content_photo": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/content-photo.jpg", 
     "contact": {
         "email": "Laurinejagui@gmail.com",
-        "instagram": "instagram.com/visualsbylaurine"
+        "instagram": "https://instagram.com/visualsbylaurine"
     }
 }
+# ... keep projects the same
 
 PROJECTS = [
     {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"]},
