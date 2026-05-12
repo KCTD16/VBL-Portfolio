@@ -6,7 +6,7 @@
     <title>VBL | {{ bio.full_name }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@1,900&family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
     <style>
         :root { --bg-primary: #ffffff; --text-primary: #000000; --border-color: rgba(0,0,0,0.08); --accent: #FA7301; }
         [data-theme='option1'] { --bg-primary: #0a0a0c; --text-primary: #ffffff; --border-color: rgba(255, 255, 255, 0.1); }
@@ -15,20 +15,18 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
         
-        /* OPTION 05: COUTURE LOGO FONT */
-        .font-logo-v5 { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-weight: 700; 
+        /* THE EXACT FONT FROM YOUR IMAGE */
+        .font-brand-editorial { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 900; 
             font-style: italic; 
-            letter-spacing: -0.05em; /* Extra Tight */
+            letter-spacing: -0.06em; 
             text-transform: uppercase;
+            line-height: 0.85;
         }
 
-        /* HEADING FONT (The Archive Style) */
-        .font-heading { font-family: 'Playfair Display', serif; font-weight: 900; font-style: italic; letter-spacing: -0.04em; }
-
         #preloader { position: fixed; inset: 0; z-index: 20000; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
-        .loader-text { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 700; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.05em; text-transform: uppercase; }
+        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-weight: 900; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.06em; text-transform: uppercase; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
@@ -45,16 +43,14 @@
         .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; }
         .parallax-img { transition: transform 0.1s ease-out; will-change: transform; }
     </style>
- head>
+</head>
 <body id="home">
     <div id="preloader"><div class="loader-text">VBL</div></div>
     <div class="film-grain"></div>
     <div id="custom-cursor"></div>
 
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-12 flex justify-between items-center mix-blend-difference text-white">
-        <!-- NAV LOGO UPDATED TO V5 -->
-        <div class="font-logo-v5 text-3xl md:text-4xl">VBL</div>
-        
+        <div class="font-brand-editorial text-3xl md:text-4xl">VBL</div>
         <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]">
             <a href="/">Home</a>
             <a href="{{ url_for('archive') }}">Full Works</a>
@@ -62,34 +58,32 @@
         </div>
     </nav>
 
-    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
+    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div><div id="lightbox-meta" class="text-[10px] uppercase tracking-[0.5em] text-white/40 pb-10"></div></div>
 
     <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center bg-black">
         <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
-        <!-- HERO LOGO (RED BOX) UPDATED TO V5 COUTURE -->
-        <h1 class="relative z-10 text-8xl md:text-[14rem] font-logo-v5 text-white shadow-2xl">{{ bio.name }}</h1>
+        <h1 class="relative z-10 text-7xl md:text-[14rem] font-brand-editorial text-white shadow-2xl">{{ bio.name }}</h1>
     </section>
 
-    <!-- Marquee Banner -->
     <div class="py-4 bg-white text-black overflow-hidden whitespace-nowrap">
         <div class="animate-marquee text-[9px] font-bold uppercase tracking-[0.6em]">
             MANCHESTER / LONDON / GLOBAL &nbsp;•&nbsp; AVAILABLE FOR COLLABORATION 2026 &nbsp;•&nbsp; VISUALS BY LAURINE &nbsp;•&nbsp; 
         </div>
     </div>
 
-    <!-- Gallery -->
+    <!-- Archive -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
             <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
-                <h2 class="text-3xl md:text-5xl font-heading uppercase">The Archive</h2>
+                <h2 class="text-4xl md:text-7xl font-brand-editorial">THE ARCHIVE</h2>
                 <p class="text-[10px] uppercase tracking-widest opacity-40">Selected Projects</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                <div class="reveal group cursor-pointer project-card" data-meta="{{ project.meta }}" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
                             <video loop muted playsinline class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
@@ -109,14 +103,14 @@
     <section id="content" class="py-40 px-6 md:px-12 bg-[var(--bg-primary)] flex flex-col md:flex-row gap-20 items-start">
         <div class="reveal w-full md:w-1/4"><div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]"><img src="{{ bio.content_photo }}" id="parallax-bio" class="parallax-img w-full h-full object-cover scale-110"></div></div>
         <div class="reveal md:pt-4">
-            <h2 class="text-5xl md:text-8xl font-heading mb-10 leading-tight uppercase">Visions in <br>Motion.</h2>
+            <h2 class="text-5xl md:text-9xl font-brand-editorial mb-10 leading-tight">VISIONS IN <br>MOTION.</h2>
             <p class="text-xl md:text-2xl font-light max-w-2xl text-zinc-400 leading-relaxed">{{ bio.bio }}</p>
         </div>
     </section>
 
     <footer class="py-40 text-center border-t border-[var(--border-color)]">
-        <span class="text-2xl md:text-4xl font-logo-v5">{{ bio.contact.email }}</span>
-        <div class="mt-8"><a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold opacity-60 hover:opacity-100 transition">Instagram: visualsbylaurine</a></div>
+        <span class="text-2xl md:text-4xl font-brand-editorial">{{ bio.contact.email }}</span>
+        <div class="mt-10"><a href="{{ bio.contact.instagram }}" target="_blank" class="text-[11px] uppercase tracking-[0.4em] font-bold opacity-60 hover:opacity-100 transition">Instagram: visualsbylaurine</a></div>
     </footer>
 
     <button onclick="toggleTheme()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center shadow-2xl z-[10000] hover:scale-110 transition">
@@ -125,9 +119,7 @@
 
     <script>
         let audioEnabled = false; document.addEventListener('click', () => { audioEnabled = true; }, { once: true });
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
+        const obs = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         const cursor = document.getElementById('custom-cursor');
         let isHovering = false;
@@ -142,12 +134,13 @@
                 card.onmouseleave = () => { vid.pause(); vid.muted = true; isHovering = false; };
             }
         });
-        function handleProjectClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src); }
-        function openLightbox(isV, src) {
+        function handleProjectClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src, el.getAttribute('data-meta')); }
+        function openLightbox(isV, src, meta) {
             const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
             document.getElementById('lightbox-content').innerHTML = isV === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[80vh] object-contain">`;
+            document.getElementById('lightbox-meta').innerText = meta || "";
         }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-content').innerHTML = ''; }
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
         window.addEventListener('scroll', () => { const s = window.pageYOffset; const img = document.getElementById('parallax-bio'); if (img) img.style.transform = `translateY(${s * 0.04}px) scale(1.1)`; });
         document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
