@@ -6,7 +6,7 @@
     <title>VBL | {{ bio.full_name }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
     <style>
         :root { --bg-primary: #ffffff; --text-primary: #000000; --border-color: rgba(0,0,0,0.08); --accent: #FA7301; }
         [data-theme='option1'] { --bg-primary: #0a0a0c; --text-primary: #ffffff; --border-color: rgba(255, 255, 255, 0.1); }
@@ -15,31 +15,34 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
         
-        /* CONSISTENT BRAND FONT */
-        .font-brand { font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; letter-spacing: -0.05em; line-height: 0.9; }
-        
+        /* THE BRAND FONT (Matched to your red box) */
+        .font-brand { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 900; 
+            font-style: italic; 
+            letter-spacing: -0.06em; 
+            line-height: 0.85;
+        }
+
         #preloader { position: fixed; inset: 0; z-index: 20000; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
-        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-weight: 700; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.05em; }
+        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-weight: 900; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.05em; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
+
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: 35px; height: 35px; background: white; pointer-events: none; 
             z-index: 10000; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            will-change: transform; transition: opacity 0.3s ease; opacity: 0;
+            will-change: transform; transition: opacity 0.3s ease, width 0.3s, height 0.3s; opacity: 0;
         }
-        .film-grain { position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; }
         .reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .animate-marquee { display: inline-block; animation: marquee 30s linear infinite; }
-        .parallax-img { transition: transform 0.1s ease-out; will-change: transform; }
     </style>
 </head>
 <body id="home">
     <div id="preloader"><div class="loader-text">VBL</div></div>
-    <div class="film-grain"></div>
     <div id="custom-cursor"></div>
 
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-12 flex justify-between items-center mix-blend-difference text-white">
@@ -53,12 +56,13 @@
 
     <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div></div>
 
-    <!-- Hero -->
+    <!-- Hero: Prioritized Loading -->
     <section class="relative h-screen flex items-center justify-center bg-black">
         <video id="hero-video" autoplay loop muted playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover opacity-60">
             <source src="{{ bio.hero_video }}" type="video/mp4">
         </video>
-        <h1 class="relative z-10 text-7xl md:text-9xl font-brand text-white shadow-2xl">{{ bio.name }}</h1>
+        <!-- Big VBL Font Matched -->
+        <h1 class="relative z-10 text-8xl md:text-[13rem] font-brand text-white shadow-2xl">{{ bio.name }}</h1>
     </section>
 
     <div class="py-4 bg-white text-black overflow-hidden whitespace-nowrap">
@@ -67,11 +71,11 @@
         </div>
     </div>
 
-    <!-- Gallery -->
+    <!-- Gallery: Lazy Loading for speed -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
             <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
-                <h2 class="text-3xl md:text-5xl font-brand">The Archive</h2>
+                <h2 class="text-4xl md:text-6xl font-brand">The Archive</h2>
                 <p class="text-[10px] uppercase tracking-widest opacity-40">Selected Projects</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
@@ -79,9 +83,8 @@
                 <div class="reveal group cursor-pointer project-card" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
-                            <video loop muted playsinline class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0" onerror="this.closest('.project-card').style.display='none'">
-                                <source src="{{ project.video }}" type="video/mp4">
-                            </video>
+                            <!-- preload="none" saves bandwidth -->
+                            <video loop muted playsinline preload="none" class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
                             <div class="absolute top-4 right-4 text-white/50 group-hover:text-white transition"><i class="fas fa-play text-[8px]"></i></div>
                         {% else %}
                             <img src="{{ project.image }}" loading="lazy" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105" onerror="this.closest('.project-card').style.display='none'">
@@ -96,15 +99,10 @@
 
     <!-- Bio -->
     <section id="content" class="py-40 px-6 md:px-12 bg-[var(--bg-primary)] flex flex-col md:flex-row gap-20 items-start">
-        <div class="reveal w-full md:w-1/4">
-            <div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]">
-                <img src="{{ bio.content_photo }}" id="parallax-bio" class="parallax-img w-full h-full object-cover scale-110">
-            </div>
-        </div>
+        <div class="reveal w-full md:w-1/4"><div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]"><img src="{{ bio.content_photo }}" class="w-full h-full object-cover" loading="lazy"></div></div>
         <div class="reveal md:pt-4">
             <h2 class="text-5xl md:text-8xl font-brand mb-10 leading-tight">Visions in <br>Motion.</h2>
-            <p class="text-xl md:text-2xl font-light max-w-2xl text-[var(--text-secondary)] leading-relaxed">{{ bio.bio }}</p>
-            <div class="mt-10 flex gap-8 text-[10px] uppercase tracking-widest opacity-40"><span>Manchester, UK</span><span>Est. {{ bio.est_year }}</span></div>
+            <p class="text-xl md:text-2xl font-light max-w-2xl text-zinc-400 leading-relaxed">{{ bio.bio }}</p>
         </div>
     </section>
 
@@ -118,10 +116,13 @@
     </button>
 
     <script>
-        let hasInteracted = false; document.addEventListener('click', () => { hasInteracted = true; }, { once: true });
-        const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.1 });
+        let audioEnabled = false; document.addEventListener('click', () => { audioEnabled = true; }, { once: true });
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         const cursor = document.getElementById('custom-cursor');
+        let isHovering = false;
         document.addEventListener('mousemove', (e) => {
             cursor.style.opacity = '1';
             window.requestAnimationFrame(() => { cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${isHovering ? 1.6 : 1})`; });
@@ -129,7 +130,7 @@
         document.querySelectorAll('.project-card').forEach(card => {
             const vid = card.querySelector('video.project-vid');
             if (vid) {
-                card.onmouseenter = () => { if (hasInteracted) vid.muted = false; vid.play().catch(e => {}); isHovering = true; };
+                card.onmouseenter = () => { if (audioEnabled) vid.muted = false; vid.play().catch(e => {}); isHovering = true; };
                 card.onmouseleave = () => { vid.pause(); vid.muted = true; isHovering = false; };
             }
         });
@@ -140,9 +141,12 @@
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-content').innerHTML = ''; }
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
-        window.addEventListener('scroll', () => { const s = window.pageYOffset; const img = document.getElementById('parallax-bio'); if (img) img.style.transform = `translateY(${s * 0.04}px) scale(1.1)`; });
-        let isHovering = false; document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
-        function toggleTheme() { const h = document.documentElement; const i = document.getElementById('theme-icon'); if (h.getAttribute('data-theme') === 'option1') { h.setAttribute('data-theme', ''); i.className = 'fas fa-moon'; } else { h.setAttribute('data-theme', 'option1'); i.className = 'fas fa-sun'; } }
+        document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });
+        function toggleTheme() {
+            const h = document.documentElement; const i = document.getElementById('theme-icon');
+            if (h.getAttribute('data-theme') === 'option1') { h.setAttribute('data-theme', ''); i.className = 'fas fa-moon'; }
+            else { h.setAttribute('data-theme', 'option1'); i.className = 'fas fa-sun'; }
+        }
     </script>
 </body>
 </html>
