@@ -32,7 +32,7 @@
     
     <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference text-white">
         <a href="/" class="font-editorial italic font-bold text-3xl tracking-tighter hover:opacity-50 transition">VBL</a>
-        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50 hover:opacity-100 transition">Home</a><span>Full Works</span></div>
+        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50 hover:opacity-100 transition">Home</a><span class="border-b border-current">Full Works</span></div>
     </nav>
 
     <header class="px-8 md:px-12 py-20 border-b border-white/10">
@@ -45,8 +45,16 @@
             {% for project in projects %}
             <div class="project-card reveal relative group break-inside-avoid cursor-pointer overflow-hidden bg-black/20 {% if project.is_video %}type-video{% else %}type-image{% endif %}" 
                  data-meta="{{ project.meta }}" onclick="handleArchiveClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
-                {% if project.is_video %}<video loop muted playsinline class="archive-vid w-full"><source src="{{ project.video }}" type="video/mp4"></video><div class="absolute top-4 right-4 text-white/30"><i class="fas fa-play text-[8px]"></i></div>
-                {% else %}<img src="{{ project.image }}" onerror="this.closest('.project-card').style.display='none'" class="w-full transition-transform duration-700 group-hover:scale-105">{% endif %}
+                
+                {% if project.is_video %}
+                    <video loop muted playsinline class="archive-vid w-full" onerror="this.closest('.project-card').style.display='none'">
+                        <source src="{{ project.video }}" type="video/mp4">
+                    </video>
+                    <div class="absolute top-4 right-4 text-white/30"><i class="fas fa-play text-[8px]"></i></div>
+                {% else %}
+                    <img src="{{ project.image }}" onerror="this.closest('.project-card').style.display='none'" class="w-full transition-transform duration-700 group-hover:scale-105">
+                {% endif %}
+
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                     <p class="text-[10px] uppercase tracking-widest font-bold text-white">{{ project.title }}</p>
                     <p class="text-[8px] uppercase tracking-widest text-white/50 mt-2">{{ project.meta }}</p>
@@ -56,7 +64,7 @@
     </main>
 
     <footer class="py-40 text-center border-t border-white/10">
-        <span class="text-2xl md:text-4xl font-editorial italic tracking-tight">{{ bio.contact.email }}</span>
+        <span class="text-2xl md:text-4xl font-editorial italic font-bold tracking-tighter">{{ bio.contact.email }}</span>
     </footer>
 
     <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition border border-black/10"><i class="fas fa-palette"></i></button>
