@@ -15,18 +15,18 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease; overflow-x: hidden; }
         
-        /* UPDATED BRAND FONT: 900 Weight, -0.06em tracking, Lowercase */
+        /* BRAND FONT: UPPERCASE, BOLD ITALIC 900, TIGHT TRACKING */
         .font-brand { 
             font-family: 'Playfair Display', serif; 
             font-weight: 900; 
             font-style: italic; 
             letter-spacing: -0.06em; 
-            text-transform: lowercase;
+            text-transform: uppercase;
             line-height: 0.85;
         }
 
         #preloader { position: fixed; inset: 0; z-index: 20000; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
-        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-weight: 900; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.06em; text-transform: lowercase; }
+        .loader-text { font-family: 'Playfair Display'; font-style: italic; font-weight: 900; font-size: 2.5rem; color: white; animation: pulse 1.5s infinite; letter-spacing: -0.06em; text-transform: uppercase; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         
         @media (pointer: fine) { body, a, button, .group, .cursor-pointer { cursor: none !important; } }
@@ -45,12 +45,12 @@
     </style>
 </head>
 <body id="home">
-    <div id="preloader"><div class="loader-text">vbl</div></div>
+    <div id="preloader"><div class="loader-text">VBL</div></div>
     <div class="film-grain"></div>
     <div id="custom-cursor"></div>
 
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-12 flex justify-between items-center mix-blend-difference text-white">
-        <div class="font-brand text-3xl md:text-4xl">vbl</div>
+        <div class="font-brand text-3xl md:text-4xl">VBL</div>
         <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]">
             <a href="/" class="nav-link">Home</a>
             <a href="{{ url_for('archive') }}" class="nav-link">Full Works</a>
@@ -58,7 +58,7 @@
         </div>
     </nav>
 
-    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div><div id="lightbox-meta" class="text-[10px] uppercase tracking-[0.5em] text-white/40 pb-10"></div></div>
+    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center p-6 text-white font-brand"></div></div>
 
     <!-- Hero -->
     <section class="relative h-screen flex items-center justify-center bg-black">
@@ -74,16 +74,16 @@
         </div>
     </div>
 
-    <!-- Archive -->
+    <!-- Gallery -->
     <section id="gallery" class="py-32 px-6 md:px-12 bg-[var(--bg-secondary)]">
         <div class="max-w-6xl mx-auto">
             <div class="reveal flex justify-between items-end mb-20 border-b border-[var(--border-color)] pb-10">
-                <h2 class="text-4xl md:text-7xl font-brand">the archive</h2>
+                <h2 class="text-4xl md:text-7xl font-brand">THE ARCHIVE</h2>
                 <p class="text-[10px] uppercase tracking-widest opacity-40">Selected Projects</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" data-meta="{{ project.meta }}" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                <div class="reveal group cursor-pointer project-card" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative">
                         {% if project.is_video %}
                             <video loop muted playsinline class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0"><source src="{{ project.video }}" type="video/mp4"></video>
@@ -103,8 +103,9 @@
     <section id="content" class="py-40 px-6 md:px-12 bg-[var(--bg-primary)] flex flex-col md:flex-row gap-20 items-start">
         <div class="reveal w-full md:w-1/4"><div class="aspect-[3/4] overflow-hidden shadow-2xl border border-[var(--border-color)]"><img src="{{ bio.content_photo }}" id="parallax-bio" class="parallax-img w-full h-full object-cover scale-110"></div></div>
         <div class="reveal md:pt-4">
-            <h2 class="text-5xl md:text-9xl font-brand mb-10 leading-tight">visions in <br>motion.</h2>
+            <h2 class="text-5xl md:text-9xl font-brand mb-10 leading-tight">VISIONS IN <br>MOTION.</h2>
             <p class="text-xl md:text-2xl font-light max-w-2xl text-zinc-400 leading-relaxed">{{ bio.bio }}</p>
+            <div class="mt-10 flex gap-8 text-[10px] uppercase tracking-widest opacity-40"><span>Manchester, UK</span><span>Est. {{ bio.est_year }}</span></div>
         </div>
     </section>
 
@@ -119,7 +120,9 @@
 
     <script>
         let audioEnabled = false; document.addEventListener('click', () => { audioEnabled = true; }, { once: true });
-        const obs = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.1 });
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         const cursor = document.getElementById('custom-cursor');
         let isHovering = false;
@@ -134,13 +137,12 @@
                 card.onmouseleave = () => { vid.pause(); vid.muted = true; isHovering = false; };
             }
         });
-        function handleProjectClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src, el.getAttribute('data-meta')); }
-        function openLightbox(isV, src, meta) {
+        function handleProjectClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src); }
+        function openLightbox(isVid, src) {
             const lb = document.getElementById('lightbox'); lb.style.display = 'flex';
-            document.getElementById('lightbox-content').innerHTML = isV === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[80vh] object-contain">`;
-            document.getElementById('lightbox-meta').innerText = meta || "";
+            document.getElementById('lightbox-content').innerHTML = isVid === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${src}" type="video/mp4"></video>` : `<img src="${src}" class="max-w-full max-h-[80vh] object-contain">`;
         }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-content').innerHTML = ''; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').style.opacity = '0'; setTimeout(() => document.getElementById('preloader').style.display = 'none', 800); }, 1000); });
         window.addEventListener('scroll', () => { const s = window.pageYOffset; const img = document.getElementById('parallax-bio'); if (img) img.style.transform = `translateY(${s * 0.04}px) scale(1.1)`; });
         document.querySelectorAll('a, button').forEach(el => { el.onmouseenter = () => isHovering = true; el.onmouseleave = () => isHovering = false; });

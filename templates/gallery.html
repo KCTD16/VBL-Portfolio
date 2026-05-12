@@ -9,17 +9,17 @@
     <style>
         :root { --bg-color: #0a0a0c; --text-color: #ffffff; }
         [data-theme='orange'] { --bg-color: #FA7301; --text-color: #000000; }
-        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--text-color); }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.6s ease, color 0.6s ease; overflow-x: hidden; }
         
-        /* UPDATED BRAND FONT */
+        /* BRAND FONT MATCHED */
         .font-brand { 
             font-family: 'Playfair Display', serif; 
             font-weight: 900; 
             font-style: italic; 
             letter-spacing: -0.06em; 
-            text-transform: lowercase;
+            text-transform: uppercase;
             line-height: 0.9;
         }
         
@@ -41,12 +41,12 @@
     <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center p-6 text-white font-brand"></div></div>
     
     <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference text-white">
-        <a href="/" class="font-brand text-3xl md:text-4xl hover:opacity-50 transition">vbl</a>
-        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50">Home</a><span>Full Works</span></div>
+        <a href="/" class="font-brand text-3xl md:text-4xl hover:opacity-50 transition">VBL</a>
+        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50 hover:opacity-100 transition">Home</a><span>Full Works</span></div>
     </nav>
 
     <header class="px-8 md:px-12 py-20 border-b border-white/10 reveal">
-        <h1 class="text-7xl md:text-9xl font-brand">full works.</h1>
+        <h1 class="text-7xl md:text-9xl font-brand">FULL WORKS.</h1>
         <div class="mt-16 flex gap-12"><button onclick="filterWorks('all', this)" class="filter-btn active">All</button><button onclick="filterWorks('video', this)" class="filter-btn">Motion</button><button onclick="filterWorks('image', this)" class="filter-btn">Stills</button></div>
     </header>
 
@@ -63,7 +63,7 @@
 
     <footer class="py-40 text-center border-t border-white/10"><span class="text-2xl md:text-4xl font-brand">{{ bio.contact.email }}</span></footer>
 
-    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100]"><i class="fas fa-palette"></i></button>
+    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition border border-black/10"><i class="fas fa-palette"></i></button>
 
     <script>
         let canPlay = false; document.addEventListener('click', () => { canPlay = true; }, { once: true });
