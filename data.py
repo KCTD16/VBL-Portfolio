@@ -16,7 +16,6 @@ BIO = {
     }
 }
 
-# The curated Top 6
 PROJECTS = [
     {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa • 4:3"},
     {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Director's Cut"},
@@ -26,7 +25,6 @@ PROJECTS = [
     {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"], "meta": "Visual ID"}
 ]
 
-# Smart Archive Loader
 for i in range(1, 41):
     if i not in [20, 21, 22]:
         link = f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}"

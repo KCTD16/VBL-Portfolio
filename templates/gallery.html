@@ -12,7 +12,9 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--text-color); }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.6s ease, color 0.6s ease; overflow-x: hidden; }
-        .font-editorial { font-family: 'Playfair Display', serif; }
+        
+        .font-brand { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; letter-spacing: -0.05em; }
+        
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         @media (pointer: fine) { body, a, button, .project-card { cursor: none !important; } }
@@ -21,53 +23,41 @@
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             will-change: transform; transition: opacity 0.3s ease; opacity: 0;
         }
-        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .filter-btn { opacity: 0.3; transition: 0.3s; font-size: 13px; letter-spacing: 0.4em; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid transparent; }
+        #lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .filter-btn { opacity: 0.3; transition: 0.3s; font-size: 13px; letter-spacing: 0.4em; font-weight: bold; text-transform: uppercase; }
         .filter-btn.active { opacity: 1; border-bottom: 2px solid currentColor; }
     </style>
 </head>
 <body>
     <div id="custom-cursor"></div>
-    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center p-6"></div><div id="lightbox-meta" class="text-[10px] uppercase tracking-[0.5em] opacity-50 pb-10"></div></div>
+    <div id="lightbox" onclick="closeLightbox()"><div id="lightbox-content" class="w-full h-full flex items-center justify-center p-6"></div></div>
     
     <nav class="p-8 md:p-12 flex justify-between items-center w-full mix-blend-difference text-white">
-        <a href="/" class="font-editorial italic font-bold text-3xl tracking-tighter hover:opacity-50 transition">VBL</a>
-        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50 hover:opacity-100 transition">Home</a><span class="border-b border-current">Full Works</span></div>
+        <a href="/" class="font-brand text-3xl">VBL</a>
+        <div class="flex gap-8 text-[10px] uppercase font-bold tracking-[0.4em]"><a href="/" class="opacity-50">Home</a><span>Full Works</span></div>
     </nav>
 
-    <header class="px-8 md:px-12 py-20 border-b border-white/10">
-        <h1 class="text-7xl md:text-9xl font-editorial italic font-bold tracking-tighter">Full Works.</h1>
+    <header class="px-8 md:px-12 py-20 border-b border-white/10 reveal">
+        <h1 class="text-7xl md:text-9xl font-brand">Full Works.</h1>
         <div class="mt-16 flex gap-12"><button onclick="filterWorks('all', this)" class="filter-btn active">All</button><button onclick="filterWorks('video', this)" class="filter-btn">Motion</button><button onclick="filterWorks('image', this)" class="filter-btn">Stills</button></div>
     </header>
 
     <main class="px-4 md:px-8 py-12 pb-20">
         <div id="masonry" class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
             {% for project in projects %}
-            <div class="project-card reveal relative group break-inside-avoid cursor-pointer overflow-hidden bg-black/20 {% if project.is_video %}type-video{% else %}type-image{% endif %}" 
-                 data-meta="{{ project.meta }}" onclick="handleArchiveClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
-                
-                {% if project.is_video %}
-                    <video loop muted playsinline class="archive-vid w-full" onerror="this.closest('.project-card').style.display='none'">
-                        <source src="{{ project.video }}" type="video/mp4">
-                    </video>
-                    <div class="absolute top-4 right-4 text-white/30"><i class="fas fa-play text-[8px]"></i></div>
-                {% else %}
-                    <img src="{{ project.image }}" onerror="this.closest('.project-card').style.display='none'" class="w-full transition-transform duration-700 group-hover:scale-105">
-                {% endif %}
-
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-                    <p class="text-[10px] uppercase tracking-widest font-bold text-white">{{ project.title }}</p>
-                    <p class="text-[8px] uppercase tracking-widest text-white/50 mt-2">{{ project.meta }}</p>
-                </div>
+            <div class="project-card reveal relative group break-inside-avoid cursor-pointer overflow-hidden bg-black/20 {% if project.is_video %}type-video{% else %}type-image{% endif %}" onclick="handleArchiveClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                {% if project.is_video %}<video loop muted playsinline class="archive-vid w-full"><source src="{{ project.video }}" type="video/mp4"></video><div class="absolute top-4 right-4 text-white/30"><i class="fas fa-play text-[8px]"></i></div>
+                {% else %}<img src="{{ project.image }}" onerror="this.closest('.project-card').style.display='none'" class="w-full transition-transform duration-700 group-hover:scale-105">{% endif %}
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6"><p class="text-[10px] uppercase tracking-widest font-bold text-white">{{ project.title }}</p></div>
             </div>{% endfor %}
         </div>
     </main>
 
     <footer class="py-40 text-center border-t border-white/10">
-        <span class="text-2xl md:text-4xl font-editorial italic font-bold tracking-tighter">{{ bio.contact.email }}</span>
+        <span class="text-2xl md:text-4xl font-brand">{{ bio.contact.email }}</span>
     </footer>
 
-    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100] hover:scale-110 transition border border-black/10"><i class="fas fa-palette"></i></button>
+    <button onclick="toggleOrange()" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl z-[100]"><i class="fas fa-palette"></i></button>
 
     <script>
         let canPlay = false; document.addEventListener('click', () => { canPlay = true; }, { once: true });
@@ -75,9 +65,9 @@
         document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         const cursor = document.getElementById('custom-cursor');
         document.addEventListener('mousemove', (e) => { cursor.style.opacity = '1'; cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; });
-        function openLightbox(v, s, m) { const lb = document.getElementById('lightbox'); lb.style.display = 'flex'; document.getElementById('lightbox-content').innerHTML = v === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${s}" type="video/mp4"></video>` : `<img src="${s}" class="max-w-full max-h-[80vh] object-contain">`; document.getElementById('lightbox-meta').innerText = m || ""; }
+        function openLightbox(v, s) { const lb = document.getElementById('lightbox'); lb.style.display = 'flex'; document.getElementById('lightbox-content').innerHTML = v === 'True' ? `<video controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"><source src="${s}" type="video/mp4"></video>` : `<img src="${s}" class="max-w-full max-h-[80vh] object-contain">`; }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-content').innerHTML = ''; }
-        function handleArchiveClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src, el.getAttribute('data-meta')); }
+        function handleArchiveClick(el, isV, src) { const vid = el.querySelector('video'); if(vid) vid.pause(); openLightbox(isV, src); }
         function toggleOrange() { document.documentElement.getAttribute('data-theme') === 'orange' ? document.documentElement.setAttribute('data-theme', '') : document.documentElement.setAttribute('data-theme', 'orange'); }
         function filterWorks(t, b) { document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); document.querySelectorAll('.project-card').forEach(c => { c.style.display = "block"; if (t === 'video' && !c.classList.contains('type-video')) c.style.display = "none"; if (t === 'image' && !c.classList.contains('type-image')) c.style.display = "none"; }); }
         document.querySelectorAll('video').forEach(vid => { const card = vid.closest('.project-card'); card.onmouseenter = () => { if(canPlay) vid.muted = false; vid.play(); }; card.onmouseleave = () => { vid.pause(); vid.muted = true; }; });
