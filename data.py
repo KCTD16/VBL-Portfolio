@@ -16,30 +16,31 @@ BIO = {
     }
 }
 
-# THE CURATED TOP 6 (Strict order for Home Page)
+# THE CURATED TOP 6 (Home Page)
 PROJECTS = [
     {"id": "1", "title": "KLAT x Alex Spencer", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/klat-project.MP4", "is_video": True, "tags": ["Cinema"], "meta": "Arri Alexa • 4:3"},
     {"id": "2", "title": "KLAT MAG", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/noir-project.mp4", "is_video": True, "tags": ["Editorial"], "meta": "Director's Cut"},
     {"id": "3", "title": "STYLE 'N' SHOW EP2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/v1778262760/aesthetic-new.jpg", "is_video": False, "tags": ["Film"], "meta": "Visual Study"},
     {"id": "4", "title": "STYLE 'N' SHOW EP1", "video": "https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/v1778262766/city-project.mp4", "is_video": True, "tags": ["Urban"], "meta": "Sony FX3"},
-    {"id": "5", "title": "BLACK GIRL HAIR SHOP STILL", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"], "meta": "Portrait"},
+    {"id": "5", "title": "BLACK GIRL HAIR SHOP", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/shadow-form.JPG", "is_video": False, "tags": ["Editorial"], "meta": "Portrait"},
     {"id": "6", "title": "BLACK GIRL HAIR SHOP PT2", "image": "https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/final-reel.JPG", "is_video": False, "tags": ["Brand"], "meta": "Visual ID"}
 ]
 
-# EXTRA MEDIA FOR ARCHIVE (Work 20-22 and 1-19)
-archive_vids = [20, 21, 22]
-for n in archive_vids:
+# ADDITIONAL VIDEOS (For Archive Only)
+extra_vids = [20, 21, 22]
+for n in extra_vids:
     PROJECTS.append({
         "id": f"v{n}", "title": f"Work {n}", 
         "video": f"https://res.cloudinary.com/dtnypuixy/video/upload/f_auto,q_auto/work-{n}.mp4", 
         "is_video": True, "tags": ["Motion"], "meta": "Cinematography"
     })
 
-for i in range(1, 20):
+# ARCHIVE PHOTOS (Checks work-1.jpg up to work-20.jpg)
+for i in range(1, 21):
     PROJECTS.append({
         "id": f"w{i}", "title": f"Project {i}", 
         "image": f"https://res.cloudinary.com/dtnypuixy/image/upload/f_auto,q_auto/work-{i}.jpg", 
-        "is_video": False, "tags": ["Archive"], "meta": "VBL Production"
+        "is_video": False, "tags": ["Archive"], "meta": "Production Still"
     })
 
 SKILLS = [{"name": "Cinema", "level": 98}]
