@@ -239,20 +239,20 @@
                 <h2 class="text-4xl md:text-7xl font-brand-editorial">Inquiries.</h2>
             </div>
             
-            <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" class="reveal space-y-12">
+           <form onsubmit="handleInquirySubmit(event)" class="reveal space-y-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div>
-                        <label class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Your Name</label>
-                        <input type="text" name="name" required placeholder="Alexander / Studio" class="editorial-input">
+                        <label for="client-name" class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Your Name</label>
+                        <input type="text" id="client-name" required placeholder="Alexander / Studio" class="editorial-input">
                     </div>
                     <div>
-                        <label class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Your Email</label>
-                        <input type="email" name="_replyto" required placeholder="alexander@studio.com" class="editorial-input">
+                        <label for="client-email" class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Your Email</label>
+                        <input type="email" id="client-email" required placeholder="alexander@studio.com" class="editorial-input">
                     </div>
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Project Brief & Details</label>
-                    <textarea name="message" rows="3" required placeholder="Tell me about the vision, timeline, and location..." class="editorial-input"></textarea>
+                    <label for="client-message" class="text-[10px] uppercase tracking-[0.3em] opacity-50 block mb-2">Project Brief & Details</label>
+                    <textarea id="client-message" rows="3" required placeholder="Tell me about the vision, timeline, and location..." class="editorial-input"></textarea>
                 </div>
                 <div class="pt-4 flex justify-between items-center">
                     <p class="text-[10px] uppercase tracking-[0.2em] opacity-40">Direct response within 24h</p>
@@ -427,6 +427,24 @@
             el.addEventListener('mouseenter', () => isHovering = true); 
             el.addEventListener('mouseleave', () => isHovering = false); 
         });
+        // Direct Email Client Handler
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('client-name').value.trim();
+            const email = document.getElementById('client-email').value.trim();
+            const message = document.getElementById('client-message').value.trim();
+
+            const recipient = '{{ bio.contact.email }}';
+            const subject = encodeURIComponent(`Project Inquiry — ${name}`);
+            const body = encodeURIComponent(
+                `Client Name: ${name}\n` +
+                `Contact Email: ${email}\n\n` +
+                `Project Brief & Details:\n${message}`
+            );
+
+            // Opens default mail client (Mail / Gmail / Outlook) directly
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        }
     </script>
 </body>
 </html>
