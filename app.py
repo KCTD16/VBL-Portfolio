@@ -1,10 +1,13 @@
 import os
 import random
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
 from data import BIO, PROJECTS, SKILLS
+
+
+def get_remote_address():
+    return request.remote_addr
 
 app = Flask(__name__)
 
@@ -61,6 +64,10 @@ def archive():
     jumbled = list(PROJECTS)
     random.shuffle(jumbled)
     return render_template('gallery.html', bio=BIO, projects=jumbled)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html', bio=BIO), 404
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5001))
