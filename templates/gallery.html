@@ -118,27 +118,35 @@
 
     <!-- Masonry Works Section -->
     <main class="px-4 md:px-8 py-12 pb-24">
-        <div id="masonry" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+       <div id="masonry" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
             {% for project in projects %}
-            <div class="project-card reveal relative group break-inside-avoid overflow-hidden bg-zinc-900 border border-[var(--border-color)] {% if project.is_video %}type-video{% else %}type-image{% endif %}" 
+            <div class="project-card reveal relative group break-inside-avoid overflow-hidden bg-zinc-900 border border-[var(--border-color)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] {% if project.is_video %}type-video{% else %}type-image{% endif %}" 
                  data-meta="{{ project.meta }}" 
+                 tabindex="0"
+                 role="button"
+                 aria-label="View {{ project.title }}"
+                 onkeydown="if(event.key === 'Enter') handleArchiveClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')"
                  onclick="handleArchiveClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
                 
                 {% if project.is_video %}
                     <video loop muted playsinline preload="metadata" class="archive-vid w-full h-auto object-cover grayscale group-hover:grayscale-0 transition duration-500" onerror="this.closest('.project-card').style.display='none'">
                         <source src="{{ project.video }}" type="video/mp4">
                     </video>
-                    <div class="absolute top-4 right-4 text-white/40 group-hover:text-white transition">
-                        <i class="fas fa-play text-[8px]"></i>
+                    <div class="absolute top-4 right-4 text-white/70 group-hover:text-white transition">
+                        <i class="fas fa-play text-[8px]" aria-hidden="true"></i>
                     </div>
                 {% else %}
-                    <img src="{{ project.image }}" loading="lazy" alt="{{ project.title }}" onerror="this.closest('.project-card').style.display='none'" class="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105">
+                    <img src="{{ project.image }}" 
+                         loading="lazy" 
+                         alt="{{ project.title }} — Work by {{ bio.name }}" 
+                         onerror="this.closest('.project-card').style.display='none'" 
+                         class="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105">
                 {% endif %}
 
-                <!-- Hover metadata overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+                <!-- Contrast-compliant overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
                     <p class="text-[11px] uppercase tracking-widest font-bold text-white">{{ project.title }}</p>
-                    <p class="text-[9px] uppercase tracking-widest text-white/60 mt-1">{{ project.meta }}</p>
+                    <p class="text-[9px] uppercase tracking-widest text-zinc-300 mt-1">{{ project.meta }}</p>
                 </div>
             </div>
             {% endfor %}

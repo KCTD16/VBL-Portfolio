@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ bio.name }} — Creative Visuals</title>
-    <meta name="description" content="{{ bio.bio }}">
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" ="{{ bio.bio }}">
+    <script>
+    const _warn = console.warn;
+    console.warn = function(...args) {
+        if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+        _warn.apply(console, args);
+    };
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +62,6 @@
             z-index: 10000; mix-blend-mode: difference; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             will-change: transform; transition: opacity 0.2s ease; opacity: 0;
         }
-        .film-grain { position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; }
         .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
@@ -67,7 +72,6 @@
 </head>
 <body id="home">
     <div id="preloader"><div class="loader-text">VBL</div></div>
-    <div class="film-grain"></div>
     <div id="custom-cursor"></div>
 
     <!-- Navigation -->
@@ -116,17 +120,28 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
                 {% for project in projects %}
-                <div class="reveal group cursor-pointer project-card" data-meta="{{ project.meta }}" onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                <div class="reveal group cursor-pointer project-card outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]" 
+                     data-meta="{{ project.meta }}" 
+                     tabindex="0"
+                     role="button"
+                     aria-label="View {{ project.title }}"
+                     onkeydown="if(event.key === 'Enter') handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')"
+                     onclick="handleProjectClick(this, '{{ project.is_video }}', '{{ project.video if project.is_video else project.image }}')">
+                    
                     <div class="aspect-[16/11] overflow-hidden bg-zinc-900 mb-6 shadow-2xl relative border border-[var(--border-color)]">
                         {% if project.is_video %}
                             <video loop muted playsinline preload="metadata" class="project-vid w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
                                 <source src="{{ project.video }}" type="video/mp4">
                             </video>
-                            <div class="absolute top-4 right-4 text-white/50 group-hover:text-white transition">
-                                <i class="fas fa-play text-[8px]"></i>
+                            <div class="absolute top-4 right-4 text-white/70 group-hover:text-white transition">
+                                <i class="fas fa-play text-[8px]" aria-hidden="true"></i>
                             </div>
                         {% else %}
-                            <img src="{{ project.image }}" loading="lazy" alt="{{ project.title }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105" onerror="this.closest('.project-card').style.display='none'">
+                            <img src="{{ project.image }}" 
+                                 loading="lazy" 
+                                 alt="{{ project.title }} — Visual project by {{ bio.name }}" 
+                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-105" 
+                                 onerror="this.closest('.project-card').style.display='none'">
                         {% endif %}
                     </div>
                     <h3 class="uppercase text-[11px] font-bold tracking-widest px-2">{{ project.title }}</h3>
